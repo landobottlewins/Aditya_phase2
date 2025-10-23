@@ -65,6 +65,35 @@ picoCTF{549698}
 ***
 
 
+
 # ARMssembly 1
+For what argument does this program print `win` with variables 83, 0 and 3? File: chall_1.S Flag format: picoCTF{XXXXXXXX} -> (hex, lowercase, no 0x, and 32 bits. ex. 5614267 would be picoCTF{0055aabb})
+
+## Solution:
+
+
+
+
+## Flag:
+
+```
+picoCTF{0000001b}
+```
+
+## Concepts learnt:
+
+- A `.S` file is a source code file written in assembly language
+
+## Notes:
+
+
+
+## Resources:
+
+- (https://stackoverflow.com/questions/7190050/how-do-i-compile-the-asm-generated-by-gcc)
+ - (https://www.youtube.com/watch?v=1d-6Hv1c39c)
+ - (https://youtube.com/playlist?list=PLMB3ddm5Yvh3gf_iev78YP5EPzkA3nPdL&si=HXrDUtjPeSTMZQfE)
+
+***
 
 # Vault door 3
