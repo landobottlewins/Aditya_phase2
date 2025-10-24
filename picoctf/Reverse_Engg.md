@@ -187,4 +187,163 @@ picoCTF{0000001b}
 - (https://diveintosystems.org/book/C9-ARM64/common.html)
 ***
 
+
+
 # Vault door 3
+> This vault uses for-loops and byte arrays. The source code for this vault is here: VaultDoor3.java
+
+
+## Solution:
+Looking at the java code we can understand the following
+
+
+```
+import java.util.*;
+
+class VaultDoor3 {
+    public static void main(String args[]) {
+        VaultDoor3 vaultDoor = new VaultDoor3();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter vault password: ");
+        String userInput = scanner.next();
+	String input = userInput.substring("picoCTF{".length(),userInput.length()-1);
+	if (vaultDoor.checkPassword(input)) {
+	    System.out.println("Access granted.");
+	} else {
+	    System.out.println("Access denied!");
+        }
+    }
+```
+- This part is mainly for asking the user to input password
+- It also verifies the password based on the "checkPassword" function and gives output
+
+
+```
+ public boolean checkPassword(String password) {
+        if (password.length() != 32) {
+            return false;
+        }
+        char[] buffer = new char[32];
+        int i;
+        for (i=0; i<8; i++) {
+            buffer[i] = password.charAt(i);
+        }
+        for (; i<16; i++) {
+            buffer[i] = password.charAt(23-i);
+        }
+        for (; i<32; i+=2) {
+            buffer[i] = password.charAt(46-i);
+        }
+        for (i=31; i>=17; i-=2) {
+            buffer[i] = password.charAt(i);
+        }
+        String s = new String(buffer);
+        return s.equals("jU5t_a_sna_3lpm18g947_u_4_m9r54f");
+    }
+}
+```
+this is the interesting part since it manipulates the password input by user and verifies it with the string "jU5t_a_sna_3lpm18g947_u_4_m9r54f"
+
+
+taking a look at it pieces
+```
+char[] buffer = new char[32];
+int i;
+```
+creates a "buffer" which is just a character array
+
+
+```
+for (i=0; i<8; i++) {
+    buffer[i] = password.charAt(i);
+}
+```
+Takes the first 8 characters and puts them into the same positions in buffer
+
+
+```
+for (; i<16; i++) {
+    buffer[i] = password.charAt(23-i);
+}
+```
+reverses the order of characters 8–15.
+
+
+
+```
+for (; i<32; i+=2) {
+    buffer[i] = password.charAt(46 - i);
+}
+```
+- index 16 on buffer will be index 30 from password 
+- 18 on buffer from 28 on password
+- 20 on buffer from 26 on password 
+- ..and so on 
+
+
+
+```
+for (i=31; i>=17; i-=2) {
+    buffer[i] = password.charAt(i);
+}
+```
+index 17 to 31 (odd numbers) is copied into buffer from password at same position
+
+
+'''
+String s = new String(buffer);
+return s.equals("jU5t_a_sna_3lpm18g947_u_4_m9r54f");
+'''
+- Joins the rearranged characters into a string s.
+- Compares it to the target string.
+
+
+- Since this rearrangement logic is reversible, we can simply put the scrambled password as the input to get the correct password.
+- But here we wouldnt get to see the correct password. We need to edit the java code to print the buffer in the end of the function.
+
+so the last few lines would now look like:
+```
+System.out.println(buffer);
+        String s = new String(buffer);
+        return s.equals("jU5t_a_sna_3lpm18g947_u_4_m9r54f");
+```
+
+upon running the program we see
+```
+Enter vault password: picoCTF{jU5t_a_sna_3lpm18g947_u_4_m9r54f}
+jU5t_a_s1mpl3_an4gr4m_4_u_79958f
+Access denied!
+```
+
+now verifying it with the correct password:
+```
+Enter vault password: picoCTF{jU5t_a_s1mpl3_an4gr4m_4_u_79958f}
+jU5t_a_sna_3lpm18g947_u_4_m9r54f
+Access granted.
+```
+
+
+
+## Flag:
+
+```
+picoCTF{jU5t_a_s1mpl3_an4gr4m_4_u_79958f}
+```
+
+## Concepts learnt:
+- Skimmed over java basics
+
+
+## Notes:
+- I would have manually rearranged/unscrambled the target string or created a script for the same and that's when it clicked me that I just had to edit the java code to print it for me since its basically the same thing as the script I would write.
+
+
+## Resources:
+
+- (https://www.geeksforgeeks.org/java/java-programming-basics/) 
+- (https://www.geeksforgeeks.org/java/methods-in-java/)
+
+
+***
+
+
