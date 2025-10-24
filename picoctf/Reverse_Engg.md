@@ -70,6 +70,95 @@ picoCTF{549698}
 For what argument does this program print `win` with variables 83, 0 and 3? File: chall_1.S Flag format: picoCTF{XXXXXXXX} -> (hex, lowercase, no 0x, and 32 bits. ex. 5614267 would be picoCTF{0055aabb})
 
 ## Solution:
+- The challenge uses a file with `.S` extension which stores the source code of a program in assembly
+- We can analyse the code to understand what it does
+- the required "win" condtion is mentioned in .LC0 which means it must be mentioned somewhere in the code where it is called
+
+
+reading the `func`
+```
+	mov	w0, 83
+	str	w0, [sp, 16]
+	str	wzr, [sp, 20]
+	mov	w0, 3
+	str	w0, [sp, 24]
+```
+gives values and memory location 
+- 83 is at sp 16
+- 0 is at sp 20
+- 3 is at sp 24
+
+
+
+```
+	ldr	w0, [sp, 20]
+	ldr	w1, [sp, 16]
+	lsl	w0, w1, w0
+	str	w0, [sp, 28]
+```
+- w0 = 0
+- w1 = 833
+
+`lsl` is logical shift left
+- w0 = w1 << w0
+- 83 << 0 = 83
+now it stores 83 at sp 28 
+
+
+
+```
+	ldr	w1, [sp, 28]
+	ldr	w0, [sp, 24]
+	sdiv	w0, w1, w0
+	str	w0, [sp, 28]
+```
+- w0 at sp 24
+- sdiv will perform integer division
+- 83/3 = 27 and stored in sp 28 now
+
+
+
+
+```	
+    ldr	w1, [sp, 28]
+	ldr	w0, [sp, 12]
+	sub	w0, w1, w0
+	str	w0, [sp, 28]
+```
+- w1 = 27
+- w0 is set to a new memory location sp 12 which means a new variable (assume a)
+- w0 = 27 - a 
+- and now 27 - a is stored in sp 28
+
+
+
+
+```
+	ldr	w0, [sp, 28]
+	add	sp, sp, 32
+	ret
+```
+- w0 = 27 - a
+
+
+
+
+Now, we look for where LC0 is called to get the win condition. It is mentioned towards the end of the `main`
+```
+adrp	x0, .LC0
+	add	x0, x0, :lo12:.LC0
+	bl	puts
+	b	.L6
+``` 
+it indicates that the function must return 0 to get the win condition 
+
+- hence 27 - a = 0 and a is 27.
+- So the argument to be passed with the program must be 27 to print win.
+- hex(27) = 0x1b
+
+
+thus the required flag is picoCTF{0000001b}
+
 
 
 
@@ -83,9 +172,11 @@ picoCTF{0000001b}
 ## Concepts learnt:
 
 - A `.S` file is a source code file written in assembly language
+- Basics of comprehending assembly code for arm64
+- Assembly code for different architechtures is slightly different
 
 ## Notes:
-
+- I tried to run the program through arm emulation on x64 on qemu and gcc (idk i couldnt figure out exactly)
 
 
 ## Resources:
@@ -93,7 +184,7 @@ picoCTF{0000001b}
 - (https://stackoverflow.com/questions/7190050/how-do-i-compile-the-asm-generated-by-gcc)
  - (https://www.youtube.com/watch?v=1d-6Hv1c39c)
  - (https://youtube.com/playlist?list=PLMB3ddm5Yvh3gf_iev78YP5EPzkA3nPdL&si=HXrDUtjPeSTMZQfE)
-
+- (https://diveintosystems.org/book/C9-ARM64/common.html)
 ***
 
 # Vault door 3
