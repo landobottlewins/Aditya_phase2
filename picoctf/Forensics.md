@@ -90,7 +90,8 @@ aditya@Dell-Inspiron:~$ sstv -d message.wav -o result.png
 [sstv] ...Done!
 ``` 
 <img width="320" height="256" alt="image" src="https://github.com/user-attachments/assets/90278648-e5e1-4c9a-993c-9c49ed204b0d" />
-rotate the image to see the flag `picoCTF{beep_boop_im_in_Space}`
+
+- rotate the image to see the flag `picoCTF{beep_boop_im_in_Space}`
 
 
 ## Flag:
@@ -106,7 +107,7 @@ picoCTF{beep_boop_im_in_Space}
 
 ## Notes:
 
-- .pcapng files are used to store metadata, such as information about different capture interfaces, drop counters, and DNS records
+- There were a lot of utilties specifially for CTFs but this one seemed easy to use
 
 ## Resources:
 
