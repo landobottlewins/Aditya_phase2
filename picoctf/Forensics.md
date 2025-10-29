@@ -68,6 +68,61 @@ picoCTF{h1dd3n_1n_pLa1n_51GHT_18375919}
 ***
 
 
+# tunn3l v1s10n
+> We found this file. Recover the flag.
+
+
+## Solution:
+- exiftool tells that its a .bmp image file
+- I renamed it to .bmp but apparently the image is corrupted so I couldn't open it
+- So I opened the image in hxd and looked up what the correct values for a bmp should be
+
+<img width="198" height="58" alt="image" src="https://github.com/user-attachments/assets/a6218fbb-c605-43c2-a9eb-d45074c92770" />
+
+- the pixel data offset and header size are not correct and they need to be replaced 
+
+<img width="200" height="66" alt="image" src="https://github.com/user-attachments/assets/d019ce08-c5a8-47e4-8862-3d6b85c78581" />
+
+- now I can open the image
+![tunn3l_v1s10n](https://github.com/user-attachments/assets/4d4bc3c0-6ff7-4e9a-bb50-d3f3f29fd034)
+
+
+
+- I belive the image has been cropped off due to corruption and it needs to be fixed
+<img width="604" height="77" alt="image" src="https://github.com/user-attachments/assets/fc53ef83-3f48-499c-ae2e-84b526223382" />
+
+- changed the `07` on `00000010` from 01 to 03 which means that I changed the height from 306 to 818 pixels
+<img width="611" height="83" alt="image" src="https://github.com/user-attachments/assets/97d68d65-2fe5-418c-b9fa-bd0ec4647a7a" />
+
+- now we can see the flag on the image
+![tunn3l_v1s10n (2)](https://github.com/user-attachments/assets/c6adeda7-d586-401e-ade6-21858e09a3a7)
+
+
+ ## Flag:
+
+```
+picoCTF{qu1t3_a_v13w_2020}
+```
+
+
+## Concepts learnt
+- Ressurecting a file using hex edit
+
+
+
+## Notes:
+- exporting the image as jpg only displayed the image but not the flag in it
+
+
+## Resources:
+- (https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm)
+- (https://www.donwalizerjr.com/understanding-bmp/)
+  
+
+***
+
+
+
 # m00walk
 > Decode this message from the moon.
 
