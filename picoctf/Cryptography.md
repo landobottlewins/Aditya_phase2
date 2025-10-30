@@ -88,3 +88,83 @@ The RSA homomorphic property is a multiplicative one, meaning that if you multip
 
 
 ***
+
+
+# Custom encryption
+> Can you get sense of this code file and write the function that will decode the given encrypted file content.
+Find the encrypted file here flag_info and code file might be good to analyze and get the flag.
+
+
+## Solution
+
+from the the given code we can analyze and write code to find the encryption key
+```
+def generator(g, x, p):
+    return pow(g, x) % p
+p = 97 
+g = 31
+
+a = 94
+b = 21
+cipher = [131553, 993956, 964722, 1359381, 43851, 1169360, 950105, 321574, 1081658, 613914, 0, 1213211, 306957, 73085, 993956, 0, 321574, 1257062, 14617, 906254, 350808, 394659, 87702, 87702, 248489, 87702, 380042, 745467, 467744, 716233, 380042, 102319, 175404, 248489]
+
+v = generator(g, b, p)
+key = generator(v, a, p)
+
+print(key)
+```
+
+which gives the output
+```
+47
+```
+
+reversing the encryption modifying the encryption code 
+```
+decipher = ""
+for c in cipher:
+    decipher(c // key // 311)
+print(decipher)
+```
+
+reversing the xor encryption
+```
+def dynamic_xor_decrypt(plaintext, text_key):
+    cipher_text = ""
+    key_length = len(text_key)
+    k = ""
+    for i, char in enumerate(plaintext[::-1]):
+        key_char = text_key[i % key_length]
+        k += key_char
+        encrypted_char = chr(ord(char) ^ ord(key_char))
+        cipher_text += encrypted_char
+    print(k)
+    return cipher_text
+```
+
+compiling all this together and printing the flag with `print(dynamic_xor_decrypt(decipher, "aedurtu"))`
+
+this gives us the flag `picoCTF{custom_d2cr0pt6d_8b41f976}`
+
+## Flag:
+
+```
+picoCTF{custom_d2cr0pt6d_8b41f976}
+```
+
+## Concepts learnt:
+
+- Got to extensively work on python 
+
+
+## Resources:
+
+- (https://www.geeksforgeeks.org/dsa/xor-cipher/)
+
+
+***
+
+
+
+
+
