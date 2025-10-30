@@ -165,6 +165,39 @@ picoCTF{custom_d2cr0pt6d_8b41f976}
 ***
 
 
+# MiniRSA
+> Let's decrypt this: ciphertext? Something seems a bit small.
+
+
+## Solution
+
+- We have the N, e and the ciphertext.
+- We just need to find the original message
+- I looked up if there were any tools for it and there is one (https://www.dcode.fr/rsa-cipher)
+
+<img width="1357" height="820" alt="image" src="https://github.com/user-attachments/assets/ebd529c3-22a5-46af-9c14-c3d0cdcc035d" />
+this gives away the flag easily
+
+## Flag:
+
+```
+picoCTF{n33d_a_lArg3r_e_606ce004}
+```
+
+## Notes:
+
+- I thought that if n>m^e then (m^e) mod n = m^e
+
+
+## Resources:
+
+- (https://www.dcode.fr/rsa-cipher)
+
+
+***
+
+
+
 
 
 
