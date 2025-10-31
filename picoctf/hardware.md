@@ -1,3 +1,37 @@
+# IQ-Test
+> Let your input x = 30478191278.
+wrap your answer with nite{ } for the flag.
+As an example, entering x = 34359738368 gives (y0, ..., y11), so the flag would be nite{010000000011}.
+
+## Solution
+Here is a complex mesh of logic gates 
+<img width="1225" height="2176" alt="iqtest (2)" src="https://github.com/user-attachments/assets/df410887-7a98-4c6e-b3be-f4531a3f5824" />
+
+- the first logical step is to convert the x = 30478191278 from decimal to binary since the logic gates will only take 1 and 0 and theres 36 of them
+- `30478191278` in binary is `011100011000101001000100101010101110` which is 36 digits as expected
+- I believe the only method to this madness is to manually check the output of every gate and meticulously calulate the output
+
+
+Hence the final value is `100010011000` this the flag is `nite{100010011000}`
+
+## Flag:
+
+```
+nite{100010011000}
+```
+
+## Concepts learnt: 
+- Revised logic gates thoroughly 
+
+
+## Notes:
+- on converting to binary I realised that its only 35 digits and thought the question was incorrect
+- then I realised that the first digit is simply "0"
+
+
+
+***
+
 # I like Logic
 
 > i like logic and i like files, apparently, they have something in common, what should my next step be.
