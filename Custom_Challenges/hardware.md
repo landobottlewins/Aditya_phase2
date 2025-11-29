@@ -130,6 +130,80 @@ I was correct when I initally analysed using CAN but didn't realise that I had t
 - (https://en.wikipedia.org/wiki/CAN_bus)
 - (https://www.youtube.com/watch?v=9sas4uW4-Vg&t=808s)
 
+*** 
 
+# Red Devil
+`README.md`
+> this is the worst football team ever(i dont even watch football lmeow)
+
+## Solution: 
+
+- the signal.cf32 file is a 32-bit floating-point data
+- we need to decode and analyze the captured signal
+- I used the `rtl-433` utility for this
+- running `rtl_433 -A signal.cf32` gives us the output
+
+```
+- aditya@Dell-Inspiron:~/Custom_C/hardware/red-devil$ rtl_433 -A signal.cf32
+rtl_433 version 21.12 (2021-12-14) inputs file rtl_tcp RTL-SDR SoapySDR
+Use -h for usage help and see https://triq.org/ for documentation.
+Trying conf file at "rtl_433.conf"...
+Trying conf file at "/home/aditya/.config/rtl_433/rtl_433.conf"...
+Trying conf file at "/usr/local/etc/rtl_433/rtl_433.conf"...
+Trying conf file at "/etc/rtl_433/rtl_433.conf"...
+Registered 176 out of 207 device decoding protocols [ 1-4 8 11-12 15-17 19-23 25-26 29-36 38-60 63 67-71 73-100 102-105 108-116 119 121 124-128 130-149 151-161 163-168 170-175 177-197 199 201-207 ]
+Test mode active. Reading samples from file: signal.cf32
+baseband_demod_FM_cs16: low pass filter for 250000 Hz at cutoff 25000 Hz, 40.0 us
+Detected OOK package    @0.220228s
+Analyzing pulses...
+Total count:  185,  width: 1837.12 ms           (459281 S)
+Pulse width distribution:
+ [ 0] count:  114,  width: 3608 us [3604;3624]  ( 902 S)
+ [ 1] count:   71,  width: 7204 us [7200;7208]  (1801 S)
+Gap width distribution:
+ [ 0] count:   71,  width: 7172 us [7172;7180]  (1793 S)
+ [ 1] count:  113,  width: 3576 us [3576;3584]  ( 894 S)
+Pulse period distribution:
+ [ 0] count:   57,  width: 10784 us [10780;10796]       (2696 S)
+ [ 1] count:   42,  width: 14380 us [14376;14384]       (3595 S)
+ [ 2] count:   85,  width: 7188 us [7184;7196]  (1797 S)
+Pulse timing distribution:
+ [ 0] count:  227,  width: 3592 us [3576;3624]  ( 898 S)
+ [ 1] count:  142,  width: 7188 us [7172;7208]  (1797 S)
+ [ 2] count:    1,  width: 72084 us [72084;72084]       (18021 S)
+Level estimates [high, low]:  15985,    488
+RSSI: -0.2 dB SNR: 30.3 dB Noise: -30.5 dB
+Frequency offsets [F1, F2]:   -5928,      0     (-22.6 kHz, +0.0 kHz)
+Guessing modulation: Manchester coding
+view at https://triq.org/pdv/#AAB1030E081C14FFFF819191919191919191919191919191918080808090818080918090808180918091808080919191808091808080918090808081908191918091809180809081809190808080819180918080808090819180809081808090819081919081809081808091908190808180809081908180919080808081809081808091908081809081919080808081908180809081809081808080808090818080808090819081808080918080809180918080809180918080809190808080819255
+Attempting demodulation... short_width: 3608, long_width: 0, reset_limit: 7184, sync_width: 0
+Use a flex decoder with -X 'n=name,m=OOK_MC_ZEROBIT,s=3608,l=0,r=7184'
+pulse_demod_manchester_zerobit(): Analyzer Device
+bitbuffer:: Number of rows: 1
+[00] {256} 2a aa aa aa 0c 4e 48 54 42 7b 52 46 5f 48 34 63 6b 31 6e 36 5f 31 73 5f 63 30 30 6c 21 21 21 7d
+
+```
+
+- converting the hex to string gives
+  
+```
+48 54 42 7b 52 46 5f 48 34 63 6b 31 6e 36 5f 31 73 5f 63 30 30 6c 21 21 21 7d
+HTB{RF_H4ck1n6_1s_c00l!!!}
+```
+
+## flag:
+
+```
+HTB{RF_H4ck1n6_1s_c00l!!!}
+```
+
+## Concepts learnt:
+- .cf32 files are radio frequency data in 32-bit complex floating-point.
+- analysing these files involves software-defined radio (SDR) captures
+
+
+## Resources:
+- (https://www.youtube.com/watch?v=JdzVIjKA68o)
+- (https://github.com/merbanan/rtl_433)
 
  
