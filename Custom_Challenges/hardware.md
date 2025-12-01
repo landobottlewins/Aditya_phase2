@@ -200,10 +200,61 @@ HTB{RF_H4ck1n6_1s_c00l!!!}
 ## Concepts learnt:
 - .cf32 files are radio frequency data in 32-bit complex floating-point.
 - analysing these files involves software-defined radio (SDR) captures
-
-
+  
 ## Resources:
 - (https://www.youtube.com/watch?v=JdzVIjKA68o)
 - (https://github.com/merbanan/rtl_433)
+
+***
+
+# I like logic more
+
+## Solution:
+
+- MicroSD cards communicate using the SPI protocol
+- We need to identify which channel corresponds to which line of SPI
+
+- Clock (channel 3): line with regular, rapid square wave pulses. These often appear in bursts (typically groups of 8) 
+
+- Enable (channel 2): signal that stays in one state (usually High) and drops (Active Low) to "frame" the activity on the Clock and Data lines. It usually stays low for the duration of the data transfer.
+
+- MISO / MOSI (Data): These lines will switch states (High/Low) in sync with the clock pulses.
+- MISO: Chanel 0
+- MOSI: Channel 1
+<img width="1919" height="1019" alt="image" src="https://github.com/user-attachments/assets/52b1ee48-940f-4592-b1ca-3c41c395d1fc" />
+
+- Now we can export the data in ASCII format into a CSV
+<img width="440" height="708" alt="image" src="https://github.com/user-attachments/assets/ab6244cd-5013-47b2-97ec-50a872506751" />
+
+- now we search for "H" hoping to find HTB{ i.e. the flag format
+<img width="715" height="719" alt="image" src="https://github.com/user-attachments/assets/47abf233-218e-44e4-9726-628085ac6719" />
+
+
+- Here we find the flag that is `HTB{unp2073c73d_532141_p2070c015_0n_53cu23_d3v1c35}`
+
+
+## Flag:
+
+```
+HTB{unp2073c73d_532141_p2070c015_0n_53cu23_d3v1c35}
+```
+
+## Concepts learnt:
+
+- SD cards communicate with SPI protocol
+- How SPI signals can be interpretted from the channels
+- Converting the output data to ASCII and exporting as CSV
+
+
+## Resources:
+
+- (https://electronics.stackexchange.com/questions/232885/how-does-an-sd-card-communicate-with-a-computer)
+- (https://support.saleae.com/product/user-guide/protocol-analyzers/analyzer-user-guides/using-spi)
+- (https://zeroalpha.com.au/services/data-recovery-blog/sd/sd-and-micro-sd-pinout-description-including-spi-protocol#:~:text=MicroSD%20SPI%20Protocol%20Pinout,is%20not%20used%20for%20SPI.)
+
+
+
+
+
 
  
