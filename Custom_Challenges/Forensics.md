@@ -75,9 +75,48 @@ nite{n0w_y0u_kn0w_ab0ut_PNG_chunk5}
 
 ***
 
+# RAR of the Abyss
+> Two philosophers peer into the networked abyss and swap a secret. Use the secret to decrypt the Abyss’ RAwR and pull your flag from the void.
 
 
+## Solution:
+
+- As the description suggests we need to look for a RAR file.
+- going through the file in wireshark, we see some conversations 
+
+<img width="1914" height="1025" alt="image" src="https://github.com/user-attachments/assets/50c98f5c-cd9a-4110-917b-dba8372f1a6a" />
+
+- when we follow the TCP stream, we see many other streams with a full conversation and a RAR file with its password later
+```
+Camus: One must imagine Sisyphus happy but are we happy ?
+
+Nietzsche: You will be happy after reading my latest work
+
+Rar!........!.....dE7.'.a.U...u..gC...f.C..._R...wOdp..&...ka*.sG.......qxr..]._....o......[*...V.DP..k.I..T.w~............1...:o:....KOd.q..9...Z.....|..aY.R...[..q8......}...A.!\..E..7L!.|.../.........)).{ja.....t....=...........A...j%..X..........y...k...q2....Ku..v.g...\y{.....R.J.
+
+Camus: whats the password ?
+
+Nietzsche: b3y0ndG00dand3vil
+
+Camus: thanks
+```
+
+<img width="1292" height="912" alt="image" src="https://github.com/user-attachments/assets/e3ced2ee-1d4d-4fa4-a822-78739dfc507f" />
+
+- now we can save the rar and extract it using the password
+
+<img width="1186" height="578" alt="image" src="https://github.com/user-attachments/assets/b8d6bacb-8696-430c-918e-eade57396fa2" />
+
+- Now we can see the flag.txt that is saved in the archive
 
 
+## Flag:
+```
+nite{thus_sp0k3_th3_n3tw0rk_f0r3ns1cs_4n4lyst}
+```
+
+## Concepts learnt:
+- we can read the conversation in a tcp stream and also extract files from it
 
 
+***
