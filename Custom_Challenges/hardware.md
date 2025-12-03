@@ -252,9 +252,81 @@ HTB{unp2073c73d_532141_p2070c015_0n_53cu23_d3v1c35}
 - (https://support.saleae.com/product/user-guide/protocol-analyzers/analyzer-user-guides/using-spi)
 - (https://zeroalpha.com.au/services/data-recovery-blog/sd/sd-and-micro-sd-pinout-description-including-spi-protocol#:~:text=MicroSD%20SPI%20Protocol%20Pinout,is%20not%20used%20for%20SPI.)
 
+***
 
 
+# Gates of Mayhem
+> iqtest but its on steriods and you have weird aah inputs aswell.
+
+## Solution:
+- We have a set of 6 inputs in the csv file
+- We need to find the logic to operate on the inputs to get the output
+- I looked into how transistors can be used as logic gates and analyzed the given gates 
+<img width="2480" height="2055" alt="gates_of_mayhem" src="https://github.com/user-attachments/assets/8acb1855-fdcf-4abd-a02b-572d1bd74caf" />
+
+- Now we can write a python script to read each column from the csv and compute the output
+- The output is also in binary so we need to convert it to string 
+```
+import csv
+
+output_bits = ""
+
+with open("input_sequence.csv", mode="r") as csvfile:
+    reader = csv.DictReader(csvfile)
+
+    for row in reader:
+        in1 = int(row["IN1"])
+        in2 = int(row["IN2"])
+        in3 = int(row["IN3"])
+        in4 = int(row["IN4"])
+        in5 = int(row["IN5"])
+        in6 = int(row["IN6"])
+
+        part1 = in1 & in2
+        part2 = (in3 & in4) & (in5 | in6)
+        result = part1 ^ part2
+
+        output_bits += str(result)
+
+print(output_bits)
+
+# Convert bits → ASCII
+text = "".join(
+    chr(int(output_bits[i:i+8], 2))
+    for i in range(0, len(output_bits), 8)
+)
+print(text)
+
+```
+
+- The output from this script gives
+
+```
+0110001101101001011101000110000101100100011001010110110001111011001100010101111101101100001100000111011000110011010111110111010000110000010111110011001101111000011100000110110000110000001100010111010001011111011011000011000001100111001100010110001101111101
+citadel{1_l0v3_t0_3xpl01t_l0g1c}
+```
 
 
+## Flag:
+```
+citadel{1_l0v3_t0_3xpl01t_l0g1c}
+```
 
+## Concepts learnt:
+
+- converting transistors to logic gates
+- how to analyse transistors to find a logic
+- how to read from a csv file and script in python
+
+
+## Notes:
+
+I identified the first four gates quite easily. The last XOR gate was a bit confusion since it wasnt explicitly mentioned anywhere. So, I had to manually look for what happened in each case for a particular input and make a truth table. The analysis helped me realise how it worked and is an XOR gate. 
+
+## Resources:
+
+- (https://youtu.be/OWlD7gL9gS0?si=09IodCWZqtj7mhic)
+- (https://youtu.be/eYGM3XEIpHg?si=ObEMaoFRrgwY7mp-)
+
+  
  
