@@ -120,3 +120,63 @@ nite{thus_sp0k3_th3_n3tw0rk_f0r3ns1cs_4n4lyst}
 
 
 ***
+
+
+# NineTails
+> Description: Looks like I got a little too clever and hid the flag as a password in Firefox, tucked away like one of NineTails’ many tails. Recover the "logins" and the "key4" and let it guide you to the flag. Hint: I named my Ninetails "j4gjesg4", quite a peculiar name isn't it?
+
+## Solution
+- Extracting the `.rar` file we find a `.ad1` file inside it.
+- The .ad1 file is a disk image file that can be opened using the `FTK imager` tool.
+- add the disk image as an evidence item under the file menu
+- Now we can see the contents of the disk image
+- The description and hint tells us to find the directory where the passwords are stored and view the `j4gjesg4` profile
+- So we need to find the `/AppData/Roaming/Mozilla/Firefox/Profiles/j4gjesg4` in one of the users directory
+<img width="1409" height="969" alt="image" src="https://github.com/user-attachments/assets/c680a3e8-27ef-45f2-b38a-ce2e8f25f7ac" />
+
+- Now we can decrypt the passwords using this utility https://github.com/unode/firefox_decrypt
+- Export the `j4gjesg4.default-release` folder and run the command
+```
+
+C:\Users\adt10\Downloads>python firefox_decrypt.py j4gjesg4.default-release
+2025-12-04 14:52:01,860 - WARNING - Running with unsupported encoding 'locale': cp1252 - Things are likely to fail from here onwards
+2025-12-04 14:52:01,916 - WARNING - profile.ini not found in j4gjesg4.default-release
+2025-12-04 14:52:01,916 - WARNING - Continuing and assuming 'j4gjesg4.default-release' is a profile location
+
+Website:   https://www.rehack.xyz
+Username: 'warlocksmurf'
+Password: 'GCTF{m0zarella'
+
+Website:   https://ctftime.org
+Username: 'ilovecheese'
+Password: 'CHEEEEEEEEEEEEEEEEEEEEEEEEEESE'
+
+Website:   https://www.reddit.com
+Username: 'bluelobster'
+Password: '_f1ref0x_'
+
+Website:   https://www.facebook.com
+Username: 'flag'
+Password: 'SIKE'
+
+Website:   https://warlocksmurf.github.io
+Username: 'Man I Love Forensics'
+Password: 'p4ssw0rd}'
+```
+- Now we can simply read the flag from the "Password"
+
+## Flag:
+```
+GCTF{m0zarella_f1ref0x_p4ssw0rd}
+```
+
+## Concepts learnt:
+
+- We can retrive .ad1 disk images using FTK imager
+- How to use FTK imager
+- Browser passwords `logins` are stored locally and are encrypted with the `key4`
+
+## Resources:
+
+- (https://github.com/unode/firefox_decrypt)
+- (https://www.exterro.com/digital-forensics-software/ftk-imager)
