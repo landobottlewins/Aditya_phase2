@@ -180,3 +180,122 @@ GCTF{m0zarella_f1ref0x_p4ssw0rd}
 
 - (https://github.com/unode/firefox_decrypt)
 - (https://www.exterro.com/digital-forensics-software/ftk-imager)
+
+
+***
+
+# Re:Draw 
+
+> description: Her screen went black and a strange command window flickered to life, lines of text flashed across before everything went silent. Moments later, the system crashed. By sheer luck, we recovered a memory dump. Note: There are three stages to this challenge and you will find three flags. What we know: just before the crash, a black command window flickered across the screen, something in its output might still be visible if you dig through memory. She was drawing when it happened, and remnants of a painting program linger, which could reveal more if inspected in the right way. Finally, a mysterious archive hides deeper in memory, likely holding the last piece of her work. Hint: Learn up on volatility 2 and its various plugins and what they are used for.
+
+
+## Solution:
+
+- As the hint suggested, I first looked up into volatility 2 and installed it.
+
+- then run the command to check information about the image
+
+```
+┌──(kali㉿kali)-[~]
+└─$ ./vol -f MemoryDump_Lab1.raw imageinfo
+Volatility Foundation Volatility Framework 2.6
+INFO    : volatility.debug    : Determining profile based on KDBG search...
+          Suggested Profile(s) : Win7SP1x64, Win7SP0x64, Win2008R2SP0x64, Win2008R2SP1x64_23418, Win2008R2SP1x64, Win7SP1x64_23418
+                     AS Layer1 : WindowsAMD64PagedMemory (Kernel AS)
+                     AS Layer2 : FileAddressSpace (/home/kali/MemoryDump_Lab1.raw)
+                      PAE type : No PAE
+                           DTB : 0x187000L
+                          KDBG : 0xf800028100a0L
+          Number of Processors : 1
+     Image Type (Service Pack) : 1
+                KPCR for CPU 0 : 0xfffff80002811d00L
+             KUSER_SHARED_DATA : 0xfffff78000000000L
+           Image date and time : 2019-12-11 14:38:00 UTC+0000
+     Image local date and time : 2019-12-11 20:08:00 +0530
+```
+
+- Now we can find the important files files using the command `./vol -f MemoryDump_Lab1.raw --profile=Win7SP1x64 filescan`
+- from the output we can understand that the user is "Alissa Simpson"
+- We can specifically look for her with `grep`
+```
+./vol -f MemoryDump_Lab1.raw --profile=Win7SP1x64 filescan | grep "Alissa Simpson"
+```
+
+<img width="1398" height="621" alt="image" src="https://github.com/user-attachments/assets/86eb4dae-c8d0-4754-9918-c19988b66e3a" />
+
+- here we find some files and an `Important.rar` and similar
+- create a new directory called `importantstuff` and run this command to dump the file from memory
+```
+./vol -f MemoryDump_Lab1.raw --profile=Win7SP1x64 dumpfiles -Q 0x000000003fac3bc0 --name importantFile.rar -D importantstuff/
+```
+- now we find a flag.png inside the rar but its locked with a password
+- we can use hashdump to find password
+```
+┌──(kali㉿kali)-[~]
+└─$ ./vol -f MemoryDump_Lab1.raw --profile=Win7SP1x64 hashdump | grep "Alissa"
+Volatility Foundation Volatility Framework 2.6
+Alissa Simpson:1003:aad3b435b51404eeaad3b435b51404ee:f4ff64c8baac57d22f22edc681055ba6:::
+```
+
+- use `F4FF64C8BAAC57D22F22EDC681055BA6` as the password
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/7118a8a1-68ff-42c3-b166-d0d652491953" />
+
+> we know: just before the crash, a black command window flickered across the screen
+- we need to check the running processes list using `pslist`
+
+<img width="998" height="412" alt="image" src="https://github.com/user-attachments/assets/71d4b5f2-0d95-4e75-a648-43d284cb1fa3" />
+
+- we see various programs which were running including cmd.exe which confirms the black window
+- Let's see what was happening in the cmd prompt using `consoles`
+<img width="752" height="520" alt="image" src="https://github.com/user-attachments/assets/da53bdc4-c5d9-41f0-b33d-72fb72002894" />
+
+- We find something but it appears to be base64 encoded
+- decoding it gives `flag{th1s_1s_th3_1st_st4g3!!}`
+-  We also saw paint.exe running and we can see what was running using memdump
+
+```               
+┌──(kali㉿kali)-[~]
+└─$  ./vol -f MemoryDump_Lab1.raw --profile=Win7SP1x64 memdump -p 2424 -D importantstuff
+Volatility Foundation Volatility Framework 2.6
+************************************************************************
+Writing mspaint.exe [  2424] to 2424.dmp
+```
+- we can see exactly what happened there by renaming the .dmp to .data and open it in gimp
+<img width="639" height="983" alt="image" src="https://github.com/user-attachments/assets/2e63d30f-1c41-4ca1-b50f-d2ad7b54c848" />
+
+- I fiddled around with the numbers and format till I got to see something
+<img width="639" height="983" alt="image" src="https://github.com/user-attachments/assets/be6adc90-7ced-449e-8080-5b87a65baca0" />
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/921b594a-e59a-48f8-91f6-d65783dd64df" />
+
+- Hence we have the flags now
+
+## Flag:
+```
+flag{th1s_1s_th3_1st_st4g3!!}
+
+flag{w3ll_3rd_stage_was_easy}
+
+flag{Good_BoY_good_girl}
+```
+
+## Concepts learnt:
+
+- How to analyse a memory dump
+- learning to use volatility 2
+- what a hashdump is and how to extract passwords using it in a mem dump
+
+## Notes:
+
+- finding volatility 2 wasnt very easy to download but I figured something
+- ran these commands
+```
+wget http://downloads.volatilityfoundation.org/releases/2.6/volatility_2.6_lin64_standalone.zip
+unzip volatility_2.6_lin64_standalone.zip
+mv volatility_2.6_lin64_standalone/volatility_2.6_lin64_standalone ./vol
+chmod +x ./vol
+```
+
+## Resources:
+- (https://infosecwriteups.com/memory-dump-analysis-by-using-volatility-framework-742d70663d41)
+- (https://hacktivity.fr/volatility-2-windows-cheatsheet/)
