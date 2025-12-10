@@ -22,5 +22,32 @@ unranked-wisdom-anthem
 ```
 
 # Day 3:
-- Ingest custom log data into Splunk and define field extractions to structure the raw text.
-- Utilize Search Processing Language (SPL) to filter events and refine search queries.
+- Analyzed system web traffic logs to visualize network activity 
+- Identified massive spikes in requests and unusual patterns to pinpoint potential malicious actors
+- Detected dangerous SQL injection attempts originating from specific IP addresses
+- Uncovered indicators of Command and Control (C2) communications and Remote Code Execution (RCE) within the logs
+
+## Flags:
+
+```
+198.51.100.55
+2025-10-12
+993
+658
+126167
+```
+
+
+# Day 4:
+
+
+## Flag:
+
+- Explored how AI assistants like "Van SolveIT" can augment both Red and Blue team operations by handling tedious tasks.
+- Used the AI to generate a custom exploit script for a vulnerability, then executed it to compromise a target (Red team)
+- Analyzed web logs identifying attack patterns and suspicious user agents without manual sifting (blue team)
+  
+```
+THM{AI_MANIA}
+THM{SQLI_EXPLOIT}
+```
