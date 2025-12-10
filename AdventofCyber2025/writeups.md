@@ -40,12 +40,11 @@ unranked-wisdom-anthem
 
 # Day 4:
 
-
-## Flag:
-
 - Explored how AI assistants like "Van SolveIT" can augment both Red and Blue team operations by handling tedious tasks.
 - Used the AI to generate a custom exploit script for a vulnerability, then executed it to compromise a target (Red team)
 - Analyzed web logs identifying attack patterns and suspicious user agents without manual sifting (blue team)
+
+## Flag:
   
 ```
 THM{AI_MANIA}
