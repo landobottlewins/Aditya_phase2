@@ -50,3 +50,39 @@ unranked-wisdom-anthem
 THM{AI_MANIA}
 THM{SQLI_EXPLOIT}
 ```
+
+***
+
+# Day 5:
+
+- This day is about Insecure Direct Object References. It is a vulnerability where an attacker can access unauthorized data by changing url or api request.
+- Investigated a web app to track down a sus user manipulating whishlists.
+- Used browser dev tools to find API call containing userid and modified it to cycle through user accounts.
+
+## Flag:
+```
+Insecure Direct Object Reference
+Horizontal
+15
+```
+
+
+***
+
+
+# Day 6:
+
+- This day was about malware analysus using sanbox isolated environments.
+- Executed sus file which was sent from a phishing email
+- Learnt static and dynamic analysis
+- Used PEstudio, Regshot and ProcMon
+- The malware establised persistence by adding itself to the windows registry and communicates with c2 server over http
+
+
+## Flag:
+```
+F29C270068F865EF4A747E2683BFA07667BF64E768B38FBB9A2750A3D879CA33
+THM{STRINGS_FOUND}
+HKU\S-1-5-21-1966530601-3185510712-10604624-1008\Software\Microsoft\Windows\CurrentVersion\Run\HopHelper
+http
+```
