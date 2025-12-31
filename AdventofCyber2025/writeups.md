@@ -331,4 +331,84 @@ THM{WINNER_OF_Bunny_R@ce}
 ```
 
 
+## Day 21
+
+* Analyzed the anatomy of HTML Applications (HTA) and how they can be weaponized for initial access.
+* Investigated the `survey.hta` file to understand the underlying VBScript and how it interacts with the host system.
+* Identified the specific function used to execute system commands (`runObject.Run`) and extracted the payload.
+* Decoded the obfuscated strings (Base64 and ROT13) to reveal the actual PowerShell command being executed by the malware.
+
+## Flag:
+
+```
+Best Festival Company Developer Survey
+getQuestions
+survey.bestfestiivalcompany.com
+i
+4
+South Pole
+ComputerName,UserName
+/details
+GET
+runObject.Run "powershell.exe -nop -w hidden -c " & feedbackString, 0, False
+base64
+rot13
+THM{Malware.Analysed}
+
+```
+
+## Day 22
+
+* utilized **RITA** (Real Intelligence Threat Analytics) to search for Command and Control (C2) beaconing behavior within network traffic
+* Analyzed connection intervals and data sizes to identify suspicious "heartbeats" from compromised hosts.
+* Correlated RITA's findings with raw **Zeek** logs to confirm the destination domains and connection durations.
+* Filtered the dataset to isolate the specific C2 server communicating with the internal network.
+
+## Flag:
+
+```
+6
+prevalence
+40
+dst:rabbithole.malhare.net beacon:>=70 sort:duration-desc
+80
+
+```
+
+## Day 23
+
+* Explored AWS Identity and Access Management concepts including Users, Groups, Roles, and Policies
+* Performed enumeration on the AWS environment to identify active users and audit their attached permissions.
+* Identified a misconfiguration in `SirCarrotbanePolicy` that allowed for privilege escalation or unauthorized access.
+* Leveraged the enumerated role to list the contents of a private S3 bucket and retrieve the final flag.
+
+## Flag:
+
+```
+123456789012
+policy
+SirCarrotbanePolicy
+ListAllMyBuckets
+THM{more_like_sir_cloudbane}
+
+```
+
+## Day 24
+
+* Deep dive into advanced usage of `curl` for interacting with web applications during the finale.
+* Crafted manual POST requests to submit data to the server without a browser.
+* Managed session cookies to maintain authentication state across multiple requests.
+* Bypassed User-Agent filtering by spoofing the header to mimic authorized devices and brute-forced the login to recover the final
+
+## Flag:
+
+```
+THM{curl_post_success}
+THM{session_cookie_master}
+secretpass
+THM{user_agent_filter_bypassed}
+
+```
+
+---
 
